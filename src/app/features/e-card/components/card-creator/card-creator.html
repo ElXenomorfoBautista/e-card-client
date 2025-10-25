@@ -17,7 +17,7 @@
     <!-- Formulario por pasos -->
     <div class="steps-content">
         <!-- ============================================ -->
-        <!-- PASO 1: INFORMACIÓN BÁSICA -->
+        <!-- PASO 1: INFORMACIÓN BÁSICA (activeIndex === 0) -->
         <!-- ============================================ -->
         <div *ngIf="activeIndex === 0" class="step-panel">
             <h2>
@@ -61,7 +61,7 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- PASO 2: DISEÑO Y COLORES -->
+        <!-- PASO 2: DISEÑO Y COLORES (activeIndex === 1) -->
         <!-- ============================================ -->
         <div *ngIf="activeIndex === 1" class="step-panel">
             <h2>
@@ -86,7 +86,7 @@
                             <label for="secondaryColor" class="required">Color Secundario *</label>
                             <p-colorPicker formControlName="secondaryColor" [inline]="false"> </p-colorPicker>
                             <input type="text" pInputText formControlName="secondaryColor" placeholder="#00cc66" class="color-input" />
-                            <small>Para subtítulos</small>
+                            <small>Para acentos y elementos secundarios</small>
                         </div>
 
                         <!-- Color de Fondo -->
@@ -94,7 +94,7 @@
                             <label for="backgroundColor" class="required">Color de Fondo *</label>
                             <p-colorPicker formControlName="backgroundColor" [inline]="false"> </p-colorPicker>
                             <input type="text" pInputText formControlName="backgroundColor" placeholder="#ffffff" class="color-input" />
-                            <small>Fondo de secciones</small>
+                            <small>Color de fondo de la tarjeta</small>
                         </div>
 
                         <!-- Color de Texto -->
@@ -102,7 +102,7 @@
                             <label for="textColor" class="required">Color de Texto *</label>
                             <p-colorPicker formControlName="textColor" [inline]="false"> </p-colorPicker>
                             <input type="text" pInputText formControlName="textColor" placeholder="#1e293b" class="color-input" />
-                            <small>Texto principal</small>
+                            <small>Color del texto principal</small>
                         </div>
 
                         <!-- Color de Acento -->
@@ -110,47 +110,56 @@
                             <label for="accentColor" class="required">Color de Acento *</label>
                             <p-colorPicker formControlName="accentColor" [inline]="false"> </p-colorPicker>
                             <input type="text" pInputText formControlName="accentColor" placeholder="#ff6600" class="color-input" />
-                            <small>Para destacados</small>
+                            <small>Para botones y llamados a la acción</small>
                         </div>
                     </div>
 
-                    <!-- Border Radius -->
+                    <!-- Otras opciones de diseño -->
                     <div class="field">
-                        <label for="borderRadius">Redondez de Bordes</label>
-                        <p-select
-                            formControlName="borderRadius"
-                            [options]="[
-                {label: 'Pequeño (8px)', value: 'small'},
-                {label: 'Mediano (12px)', value: 'medium'},
-                {label: 'Grande (20px)', value: 'large'},
-                {label: 'Circular', value: 'circle'}
-              ]"
-                            placeholder="Selecciona el estilo"
-                        >
+                        <label for="fontFamily">Fuente</label>
+                        <p-select formControlName="fontFamily" [options]="[
+                            {label: 'Poppins', value: 'Poppins'},
+                            {label: 'Roboto', value: 'Roboto'},
+                            {label: 'Open Sans', value: 'Open Sans'},
+                            {label: 'Montserrat', value: 'Montserrat'}
+                        ]" optionLabel="label" optionValue="value" placeholder="Selecciona una fuente">
                         </p-select>
                     </div>
 
-                    <!-- Background Image URL (opcional) -->
                     <div class="field">
-                        <label for="backgroundImageUrl">URL de Imagen de Fondo (Opcional)</label>
-                        <input id="backgroundImageUrl" type="url" pInputText formControlName="backgroundImageUrl" placeholder="https://ejemplo.com/fondo.jpg" />
-                        <small class="field-hint">
-                            <i class="pi pi-info-circle"></i>
-                            Imagen de fondo para el viewer (opcional)
-                        </small>
+                        <label for="fontSize">Tamaño de Fuente</label>
+                        <p-select formControlName="fontSize" [options]="[
+                            {label: 'Pequeño', value: 'small'},
+                            {label: 'Mediano', value: 'medium'},
+                            {label: 'Grande', value: 'large'}
+                        ]" optionLabel="label" optionValue="value" placeholder="Selecciona un tamaño">
+                        </p-select>
+                    </div>
+
+                    <div class="field">
+                        <label for="borderRadius">Bordes Redondeados</label>
+                        <p-select formControlName="borderRadius" [options]="[
+                            {label: 'Sin redondeo', value: 'none'},
+                            {label: 'Ligero', value: 'small'},
+                            {label: 'Mediano', value: 'medium'},
+                            {label: 'Redondeado', value: 'large'}
+                        ]" optionLabel="label" optionValue="value" placeholder="Selecciona el estilo de bordes">
+                        </p-select>
                     </div>
                 </div>
             </form>
         </div>
 
         <!-- ============================================ -->
-        <!-- PASO 3: INFORMACIÓN DE CONTACTO -->
+        <!-- PASO 3: CONTACTO (activeIndex === 2) -->
         <!-- ============================================ -->
         <div *ngIf="activeIndex === 2" class="step-panel">
             <h2>
                 <i class="pi pi-phone"></i>
                 Información de Contacto
             </h2>
+
+            <p class="step-description">Agrega al menos un método de contacto</p>
 
             <form [formGroup]="contactForm">
                 <div formArrayName="contacts">
@@ -163,22 +172,19 @@
                         <div class="p-fluid contact-form">
                             <!-- Tipo de contacto -->
                             <div class="field">
-                                <label>Tipo de Contacto *</label>
-                                <p-select
-                                    formControlName="contactType"
-                                    [options]="[
-                    {label: 'Teléfono', value: 'phone', icon: 'pi pi-phone'},
-                    {label: 'Email', value: 'email', icon: 'pi pi-envelope'},
-                    {label: 'Dirección', value: 'address', icon: 'pi pi-map-marker'},
-                    {label: 'Sitio Web', value: 'website', icon: 'pi pi-globe'}
-                  ]"
-                                >
+                                <label>Tipo *</label>
+                                <p-select formControlName="contactType" [options]="[
+                                    {label: 'Teléfono', value: 'phone'},
+                                    {label: 'Email', value: 'email'},
+                                    {label: 'Dirección', value: 'address'},
+                                    {label: 'Sitio Web', value: 'website'}
+                                ]" optionLabel="label" optionValue="value">
                                     <ng-template let-item pTemplate="selectedItem">
                                         <i [class]="getContactIcon(item.value)"></i>
                                         {{ item.label }}
                                     </ng-template>
                                     <ng-template let-item pTemplate="item">
-                                        <i [class]="item.icon"></i>
+                                        <i [class]="getContactIcon(item.value)"></i>
                                         {{ item.label }}
                                     </ng-template>
                                 </p-select>
@@ -186,17 +192,17 @@
 
                             <!-- Etiqueta -->
                             <div class="field">
-                                <label>Etiqueta *</label>
-                                <input type="text" pInputText formControlName="label" placeholder="Ej: WhatsApp Personal" />
+                                <label>Etiqueta</label>
+                                <input type="text" pInputText formControlName="label" placeholder="Ej: Principal, Oficina" />
                             </div>
 
                             <!-- Valor -->
                             <div class="field">
                                 <label>Valor *</label>
-                                <input type="text" pInputText formControlName="value" placeholder="Ej: +52 81 1234 5678" />
+                                <input type="text" pInputText formControlName="value" placeholder="Ingresa el valor" />
                             </div>
 
-                            <!-- Es primario? -->
+                            <!-- Contacto principal -->
                             <div class="field-checkbox">
                                 <p-checkbox formControlName="isPrimary" [binary]="true" inputId="isPrimary{{i}}"> </p-checkbox>
                                 <label [for]="'isPrimary' + i">Contacto principal</label>
@@ -211,7 +217,7 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- PASO 4: REDES SOCIALES -->
+        <!-- PASO 4: REDES SOCIALES (activeIndex === 3) -->
         <!-- ============================================ -->
         <div *ngIf="activeIndex === 3" class="step-panel">
             <h2>
@@ -261,9 +267,9 @@
         </div>
 
         <!-- ============================================ -->
-        <!-- PASO 5: HORARIOS -->
+        <!-- PASO 5: HORARIOS (activeIndex === 4) ✅ CORREGIDO -->
         <!-- ============================================ -->
-        <div *ngIf="activeIndex === 3" class="step-panel">
+        <div *ngIf="activeIndex === 4" class="step-panel">
             <h2>
                 <i class="pi pi-clock"></i>
                 Horarios de Atención
