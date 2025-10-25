@@ -1,0 +1,145 @@
+<!-- ============================================ -->
+<!-- LOADING STATE -->
+<!-- ============================================ -->
+<div *ngIf="loading" class="card-skeleton">
+    <p-card styleClass="shadow-3">
+        <div class="flex flex-column gap-3 p-3">
+            <p-skeleton shape="circle" size="120px" styleClass="mx-auto"></p-skeleton>
+            <p-skeleton width="70%" height="2.5rem" styleClass="mx-auto"></p-skeleton>
+            <p-skeleton width="50%" height="1.5rem" styleClass="mx-auto"></p-skeleton>
+            <p-skeleton width="100%" height="54px" styleClass="mt-3"></p-skeleton>
+            <p-skeleton width="100%" height="54px"></p-skeleton>
+            <p-skeleton width="100%" height="54px"></p-skeleton>
+        </div>
+    </p-card>
+</div>
+
+<!-- ============================================ -->
+<!-- ERROR STATE -->
+<!-- ============================================ -->
+<div *ngIf="!loading && error" class="error-container">
+    <p-card styleClass="shadow-3">
+        <div class="flex flex-column align-items-center gap-4 p-4">
+            <i class="pi pi-exclamation-triangle" style="font-size: 4rem; color: #ef4444"></i>
+            <h2 style="margin: 0; color: #1e293b">{{ error }}</h2>
+            <p style="margin: 0; color: #64748b; text-align: center">La tarjeta que buscas no existe o no está disponible.</p>
+            <button pButton label="Volver al inicio" icon="pi pi-home" class="p-button-outlined" (click)="goHome()"></button>
+        </div>
+    </p-card>
+</div>
+
+<!-- ============================================ -->
+<!-- CARD VIEWER -->
+<!-- ============================================ -->
+<div *ngIf="!loading && card" class="card-viewer">
+    <div class="card-container">
+        <!-- ============================================ -->
+        <!-- HEADER -->
+        <!-- ============================================ -->
+        <div class="card-header">
+            <!-- Logo o Avatar -->
+            <div class="logo-container" *ngIf="card.logoUrl">
+                <img [src]="card.logoUrl" [alt]="card.title" class="card-logo" loading="lazy" />
+            </div>
+
+            <div class="logo-container" *ngIf="!card.logoUrl">
+                <div class="avatar-placeholder" [ngStyle]="{'background-color': card.styles.primaryColor}">{{ getInitials() }}</div>
+            </div>
+
+            <!-- Título -->
+            <h1 class="card-title" [ngStyle]="{'color': card.styles.primaryColor}">{{ card.title }}</h1>
+
+            <!-- Profesión -->
+            <p class="card-profession" *ngIf="card.profession" [ngStyle]="{'color': card.styles.secondaryColor}">{{ card.profession }}</p>
+
+            <!-- Descripción -->
+            <p class="card-description" *ngIf="card.description">{{ card.description }}</p>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- REDES SOCIALES -->
+        <!-- ============================================ -->
+        <div class="social-links" *ngIf="card.socialLinks && card.socialLinks.length > 0">
+            <h3 [ngStyle]="{'color': card.styles.primaryColor}">
+                <i class="pi pi-share-alt"></i>
+                <span>Redes Sociales</span>
+            </h3>
+
+            <div class="social-buttons">
+                <button *ngFor="let social of card.socialLinks" pButton [label]="social.socialNetworkName" [icon]="social.iconClass" class="p-button-outlined p-button-lg" (click)="openSocialLink(social.generatedUrl)"></button>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <p-divider *ngIf="card.contactInfo && card.contactInfo.length > 0"></p-divider>
+
+        <!-- ============================================ -->
+        <!-- INFORMACIÓN DE CONTACTO -->
+        <!-- ============================================ -->
+        <div class="contact-info" *ngIf="card.contactInfo && card.contactInfo.length > 0">
+            <h3 [ngStyle]="{'color': card.styles.primaryColor}">
+                <i class="pi pi-phone"></i>
+                <span>Contacto</span>
+            </h3>
+
+            <div class="contact-list">
+                <div *ngFor="let contact of card.contactInfo" class="contact-item">
+                    <div class="contact-label">
+                        <i [ngClass]="getContactIcon(contact.contactType)" [ngStyle]="{'color': card.styles.primaryColor}"></i>
+                        <strong>{{ contact.label }}</strong>
+                    </div>
+
+                    <div class="contact-value">
+                        <span>{{ contact.value }}</span>
+                        <button pButton icon="pi pi-copy" class="p-button-text p-button-rounded p-button-sm" (click)="copyToClipboard(contact.value)"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <p-divider *ngIf="card.businessHours && card.businessHours.length > 0"></p-divider>
+
+        <!-- ============================================ -->
+        <!-- HORARIOS DE ATENCIÓN -->
+        <!-- ============================================ -->
+        <div class="business-hours" *ngIf="card.businessHours && card.businessHours.length > 0">
+            <h3 [ngStyle]="{'color': card.styles.primaryColor}">
+                <i class="pi pi-clock"></i>
+                <span>Horarios de Atención</span>
+            </h3>
+
+            <div class="hours-list">
+                <div *ngFor="let hour of card.businessHours" class="hour-item" [class.is-today]="isToday(hour.dayOfWeek)">
+                    <span class="day-name">
+                        {{ hour.dayName }}
+                        <span *ngIf="isToday(hour.dayOfWeek)" class="today-badge">HOY</span>
+                    </span>
+
+                    <span class="schedule" *ngIf="!hour.isClosed"> {{ formatTime(hour.openTime) }} - {{ formatTime(hour.closeTime) }} </span>
+
+                    <span class="closed" *ngIf="hour.isClosed"> Cerrado </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- FOOTER -->
+        <!-- ============================================ -->
+        <div class="card-footer">
+            <div class="footer-stats">
+                <span class="view-count">
+                    <i class="pi pi-eye"></i>
+                    <span>{{ card.viewCount }} {{ card.viewCount === 1 ? 'visita' : 'visitas' }}</span>
+                </span>
+
+                <span class="share-button" (click)="shareCard()">
+                    <i class="pi pi-share-alt"></i>
+                    <span>Compartir</span>
+                </span>
+            </div>
+
+            <p class="powered-by">Creado con <strong>E-Cards</strong></p>
+        </div>
+    </div>
+</div>

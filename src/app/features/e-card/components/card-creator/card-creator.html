@@ -1,0 +1,326 @@
+<div class="card-creator-container">
+    <!-- Toast para notificaciones -->
+    <p-toast></p-toast>
+
+    <!-- Header -->
+    <div class="creator-header">
+        <h1>
+            <i class="pi pi-plus-circle"></i>
+            Crear Nueva Tarjeta
+        </h1>
+        <p>Completa los siguientes pasos para crear tu tarjeta digital</p>
+    </div>
+
+    <!-- Steps Component -->
+    <p-steps [model]="steps" [(activeIndex)]="activeIndex" [readonly]="false" styleClass="custom-steps"> </p-steps>
+
+    <!-- Formulario por pasos -->
+    <div class="steps-content">
+        <!-- ============================================ -->
+        <!-- PASO 1: INFORMACIÓN BÁSICA -->
+        <!-- ============================================ -->
+        <div *ngIf="activeIndex === 0" class="step-panel">
+            <h2>
+                <i class="pi pi-user"></i>
+                Información Básica
+            </h2>
+
+            <form [formGroup]="basicInfoForm">
+                <div class="p-fluid">
+                    <!-- Título -->
+                    <div class="field">
+                        <label for="title" class="required">Nombre / Título *</label>
+                        <input id="title" type="text" pInputText formControlName="title" placeholder="Ej: Juan Pérez - Barbero" [ngClass]="{'ng-invalid ng-dirty': basicInfoForm.get('title')?.invalid && basicInfoForm.get('title')?.touched}" />
+                        <small *ngIf="basicInfoForm.get('title')?.invalid && basicInfoForm.get('title')?.touched" class="p-error"> El título es requerido (mínimo 3 caracteres) </small>
+                    </div>
+
+                    <!-- Profesión -->
+                    <div class="field">
+                        <label for="profession">Profesión / Especialidad</label>
+                        <input id="profession" type="text" pInputText formControlName="profession" placeholder="Ej: Barbero Profesional" />
+                    </div>
+
+                    <!-- Descripción -->
+                    <div class="field">
+                        <label for="description">Descripción</label>
+                        <textarea id="description" rows="4" pInputTextarea formControlName="description" placeholder="Describe tu negocio o servicios..."></textarea>
+                        <small class="field-hint"> {{ basicInfoForm.get('description')?.value?.length || 0 }} / 500 caracteres </small>
+                    </div>
+
+                    <!-- Logo URL -->
+                    <div class="field">
+                        <label for="logoUrl">URL del Logo</label>
+                        <input id="logoUrl" type="url" pInputText formControlName="logoUrl" placeholder="https://ejemplo.com/logo.jpg" />
+                        <small class="field-hint">
+                            <i class="pi pi-info-circle"></i>
+                            Pega la URL de tu logo (debe comenzar con http:// o https://)
+                        </small>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PASO 2: DISEÑO Y COLORES -->
+        <!-- ============================================ -->
+        <div *ngIf="activeIndex === 1" class="step-panel">
+            <h2>
+                <i class="pi pi-palette"></i>
+                Diseño y Colores
+            </h2>
+
+            <form [formGroup]="designForm">
+                <div class="p-fluid">
+                    <!-- Grid de colores -->
+                    <div class="color-grid">
+                        <!-- Color Primario -->
+                        <div class="color-field">
+                            <label for="primaryColor" class="required">Color Primario *</label>
+                            <p-colorPicker formControlName="primaryColor" [inline]="false"> </p-colorPicker>
+                            <input type="text" pInputText formControlName="primaryColor" placeholder="#0066cc" class="color-input" />
+                            <small>Para títulos e iconos</small>
+                        </div>
+
+                        <!-- Color Secundario -->
+                        <div class="color-field">
+                            <label for="secondaryColor" class="required">Color Secundario *</label>
+                            <p-colorPicker formControlName="secondaryColor" [inline]="false"> </p-colorPicker>
+                            <input type="text" pInputText formControlName="secondaryColor" placeholder="#00cc66" class="color-input" />
+                            <small>Para subtítulos</small>
+                        </div>
+
+                        <!-- Color de Fondo -->
+                        <div class="color-field">
+                            <label for="backgroundColor" class="required">Color de Fondo *</label>
+                            <p-colorPicker formControlName="backgroundColor" [inline]="false"> </p-colorPicker>
+                            <input type="text" pInputText formControlName="backgroundColor" placeholder="#ffffff" class="color-input" />
+                            <small>Fondo de secciones</small>
+                        </div>
+
+                        <!-- Color de Texto -->
+                        <div class="color-field">
+                            <label for="textColor" class="required">Color de Texto *</label>
+                            <p-colorPicker formControlName="textColor" [inline]="false"> </p-colorPicker>
+                            <input type="text" pInputText formControlName="textColor" placeholder="#1e293b" class="color-input" />
+                            <small>Texto principal</small>
+                        </div>
+
+                        <!-- Color de Acento -->
+                        <div class="color-field">
+                            <label for="accentColor" class="required">Color de Acento *</label>
+                            <p-colorPicker formControlName="accentColor" [inline]="false"> </p-colorPicker>
+                            <input type="text" pInputText formControlName="accentColor" placeholder="#ff6600" class="color-input" />
+                            <small>Para destacados</small>
+                        </div>
+                    </div>
+
+                    <!-- Border Radius -->
+                    <div class="field">
+                        <label for="borderRadius">Redondez de Bordes</label>
+                        <p-select
+                            formControlName="borderRadius"
+                            [options]="[
+                {label: 'Pequeño (8px)', value: 'small'},
+                {label: 'Mediano (12px)', value: 'medium'},
+                {label: 'Grande (20px)', value: 'large'},
+                {label: 'Circular', value: 'circle'}
+              ]"
+                            placeholder="Selecciona el estilo"
+                        >
+                        </p-select>
+                    </div>
+
+                    <!-- Background Image URL (opcional) -->
+                    <div class="field">
+                        <label for="backgroundImageUrl">URL de Imagen de Fondo (Opcional)</label>
+                        <input id="backgroundImageUrl" type="url" pInputText formControlName="backgroundImageUrl" placeholder="https://ejemplo.com/fondo.jpg" />
+                        <small class="field-hint">
+                            <i class="pi pi-info-circle"></i>
+                            Imagen de fondo para el viewer (opcional)
+                        </small>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PASO 3: INFORMACIÓN DE CONTACTO -->
+        <!-- ============================================ -->
+        <div *ngIf="activeIndex === 2" class="step-panel">
+            <h2>
+                <i class="pi pi-phone"></i>
+                Información de Contacto
+            </h2>
+
+            <form [formGroup]="contactForm">
+                <div formArrayName="contacts">
+                    <div *ngFor="let contact of contacts.controls; let i = index" [formGroupName]="i" class="contact-item">
+                        <div class="contact-header">
+                            <h4>Contacto #{{ i + 1 }}</h4>
+                            <button pButton icon="pi pi-trash" class="p-button-danger p-button-text p-button-sm" type="button" (click)="removeContact(i)"></button>
+                        </div>
+
+                        <div class="p-fluid contact-form">
+                            <!-- Tipo de contacto -->
+                            <div class="field">
+                                <label>Tipo de Contacto *</label>
+                                <p-select
+                                    formControlName="contactType"
+                                    [options]="[
+                    {label: 'Teléfono', value: 'phone', icon: 'pi pi-phone'},
+                    {label: 'Email', value: 'email', icon: 'pi pi-envelope'},
+                    {label: 'Dirección', value: 'address', icon: 'pi pi-map-marker'},
+                    {label: 'Sitio Web', value: 'website', icon: 'pi pi-globe'}
+                  ]"
+                                >
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <i [class]="getContactIcon(item.value)"></i>
+                                        {{ item.label }}
+                                    </ng-template>
+                                    <ng-template let-item pTemplate="item">
+                                        <i [class]="item.icon"></i>
+                                        {{ item.label }}
+                                    </ng-template>
+                                </p-select>
+                            </div>
+
+                            <!-- Etiqueta -->
+                            <div class="field">
+                                <label>Etiqueta *</label>
+                                <input type="text" pInputText formControlName="label" placeholder="Ej: WhatsApp Personal" />
+                            </div>
+
+                            <!-- Valor -->
+                            <div class="field">
+                                <label>Valor *</label>
+                                <input type="text" pInputText formControlName="value" placeholder="Ej: +52 81 1234 5678" />
+                            </div>
+
+                            <!-- Es primario? -->
+                            <div class="field-checkbox">
+                                <p-checkbox formControlName="isPrimary" [binary]="true" inputId="isPrimary{{i}}"> </p-checkbox>
+                                <label [for]="'isPrimary' + i">Contacto principal</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón agregar contacto -->
+                <button pButton label="Agregar Contacto" icon="pi pi-plus" class="p-button-outlined mt-3" type="button" (click)="addContact()"></button>
+            </form>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PASO 4: REDES SOCIALES -->
+        <!-- ============================================ -->
+        <div *ngIf="activeIndex === 3" class="step-panel">
+            <h2>
+                <i class="pi pi-share-alt"></i>
+                Redes Sociales
+            </h2>
+
+            <p class="step-description">Agrega tus redes sociales (opcional)</p>
+
+            <form [formGroup]="socialForm">
+                <div formArrayName="socials">
+                    <div *ngFor="let social of socials.controls; let i = index" [formGroupName]="i" class="social-item">
+                        <div class="social-header">
+                            <h4>Red Social #{{ i + 1 }}</h4>
+                            <button pButton icon="pi pi-trash" class="p-button-danger p-button-text p-button-sm" type="button" (click)="removeSocial(i)"></button>
+                        </div>
+
+                        <div class="p-fluid social-form">
+                            <!-- Red Social -->
+                            <div class="field">
+                                <label>Red Social *</label>
+                                <p-select formControlName="socialNetworkTypeId" [options]="cardService.socialNetworks" optionLabel="name" optionValue="id">
+                                    <ng-template let-item pTemplate="selectedItem">
+                                        <i [class]="item.iconClass"></i>
+                                        {{ item.name }}
+                                    </ng-template>
+                                    <ng-template let-item pTemplate="item">
+                                        <i [class]="item.iconClass"></i>
+                                        {{ item.name }}
+                                    </ng-template>
+                                </p-select>
+                            </div>
+
+                            <!-- Valor/Usuario -->
+                            <div class="field">
+                                <label>Usuario / Valor *</label>
+                                <input type="text" pInputText formControlName="value" [placeholder]="getSocialNetwork(social.value.socialNetworkTypeId)?.placeholder || 'Usuario'" />
+                                <small class="field-hint"> {{ getSocialNetwork(social.value.socialNetworkTypeId)?.placeholder }} </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botón agregar red social -->
+                <button pButton label="Agregar Red Social" icon="pi pi-plus" class="p-button-outlined mt-3" type="button" (click)="addSocial()"></button>
+            </form>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- PASO 5: HORARIOS -->
+        <!-- ============================================ -->
+        <div *ngIf="activeIndex === 3" class="step-panel">
+            <h2>
+                <i class="pi pi-clock"></i>
+                Horarios de Atención
+            </h2>
+
+            <form [formGroup]="scheduleForm">
+                <div formArrayName="schedules">
+                    <div *ngFor="let schedule of schedules.controls; let i = index" [formGroupName]="i" class="schedule-item">
+                        <div class="schedule-day">
+                            <strong>{{ daysOfWeek[i].label }}</strong>
+                        </div>
+
+                        <div class="schedule-form">
+                            <!-- Cerrado? -->
+                            <div class="field-checkbox">
+                                <p-checkbox formControlName="isClosed" [binary]="true" [inputId]="'isClosed' + i"> </p-checkbox>
+                                <label [for]="'isClosed' + i">Cerrado</label>
+                            </div>
+
+                            <!-- Hora de Apertura -->
+                            <div class="field" *ngIf="!schedule.value.isClosed">
+                                <label>Hora de Apertura</label>
+                                <input type="time" pInputText formControlName="openTime" />
+                            </div>
+
+                            <!-- Hora de Cierre -->
+                            <div class="field" *ngIf="!schedule.value.isClosed">
+                                <label>Hora de Cierre</label>
+                                <input type="time" pInputText formControlName="closeTime" />
+                            </div>
+
+                            <!-- Notas -->
+                            <div class="field" *ngIf="!schedule.value.isClosed">
+                                <label>Notas (Opcional)</label>
+                                <input type="text" pInputText formControlName="notes" placeholder="Ej: Horario extendido" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Botones de navegación -->
+    <div class="steps-navigation">
+        <!-- Botón Anterior -->
+        <button pButton label="Anterior" icon="pi pi-chevron-left" class="p-button-secondary" [disabled]="activeIndex === 0" (click)="prevStep()"></button>
+
+        <div class="nav-spacer"></div>
+
+        <!-- Botón Reiniciar -->
+        <button pButton label="Reiniciar" icon="pi pi-refresh" class="p-button-text p-button-secondary" (click)="resetForm()"></button>
+
+        <!-- Botón Siguiente -->
+        <button *ngIf="activeIndex < steps.length - 1" pButton label="Siguiente" icon="pi pi-chevron-right" iconPos="right" [disabled]="!canProceed()" (click)="nextStep()"></button>
+
+        <!-- Botón Crear -->
+        <button *ngIf="activeIndex === steps.length - 1" pButton label="Crear Tarjeta" icon="pi pi-check" class="p-button-success" [loading]="creating" [disabled]="!validateAllForms()" (click)="createCard()"></button>
+    </div>
+</div>

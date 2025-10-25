@@ -13,7 +13,15 @@ export const appRoutes: Routes = [
             { path: '', component: Dashboard },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
-            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
+            { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
+            {
+                path: 'ecard',
+                loadChildren: () => import('./app/features/e-card/e-card-module').then((m) => m.ECardModule)
+            },
+            {
+                path: 'cards',
+                loadChildren: () => import('./app/features/e-card/components/card-creator/card-creator.module').then((m) => m.CardCreatorModule)
+            }
         ]
     },
     { path: 'landing', component: Landing },
